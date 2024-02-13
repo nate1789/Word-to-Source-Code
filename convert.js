@@ -1,5 +1,5 @@
-function convertDocxToHtml(inputId) {
-  const fileInput = document.getElementById(inputId);
+function convertDocxToHtml() {
+  const fileInput = document.getElementById('fileInput');
   const outputDiv = document.getElementById('output');
   const copyButton = document.getElementById('copyButton');
 
@@ -11,19 +11,19 @@ function convertDocxToHtml(inputId) {
     reader.onload = function (e) {
       const arrayBuffer = e.target.result;
 
-      mammoth.extractRawText({ arrayBuffer: arrayBuffer })
+      mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
         .then(result => {
-          const plainText = result.value;
+          const htmlContent = result.value;
 
-          // Display the plain text
-          outputDiv.textContent = plainText;
+          // Display the HTML content with tags as plain text
+          outputDiv.textContent = htmlContent;
 
           // Show the "Copy" button
           copyButton.style.display = 'inline-block';
         })
         .catch(error => {
-          console.error('Error extracting raw text:', error);
-          outputDiv.innerHTML = 'Error extracting raw text. Please try again.';
+          console.error('Error converting .docx to HTML:', error);
+          outputDiv.innerHTML = 'Error converting .docx to HTML. Please try again.';
         });
     };
 
@@ -31,29 +31,6 @@ function convertDocxToHtml(inputId) {
   } else {
     alert('Please select a .docx file.');
   }
-}
-
-function convertTextToHtml(inputId) {
-  const textInput = document.getElementById(inputId);
-  const outputDiv = document.getElementById('output');
-  const copyButton = document.getElementById('copyButton');
-
-  const text = textInput.value;
-
-  mammoth.extractRawText({ arrayBuffer: new TextEncoder().encode(text) })
-    .then(result => {
-      const plainText = result.value;
-
-      // Display the plain text
-      outputDiv.textContent = plainText;
-
-      // Show the "Copy" button
-      copyButton.style.display = 'inline-block';
-    })
-    .catch(error => {
-      console.error('Error extracting raw text:', error);
-      outputDiv.innerHTML = 'Error extracting raw text. Please try again.';
-    });
 }
 
 function copyToClipboard() {
